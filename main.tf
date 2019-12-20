@@ -17,20 +17,6 @@ resource "azurerm_resource_group" "vmss" {
   tags     = "${var.tags}"
 }
 
-data "template_file" "cloudconfig" {
-  template = "${file("${var.cloudconfig_file}")}"
-}
-
-data "template_cloudinit_config" "config" {
-  gzip          = true
-  base64_encode = true
-
-  part {
-    content_type = "text/cloud-config"
-    content      = "${data.template_file.cloudconfig.rendered}"
-  }
-}
-
 resource "azurerm_virtual_machine_scale_set" "vm-linux" {
   count               = "${var.nb_instance}"
   name                = "${var.vmscaleset_name}"
@@ -71,7 +57,7 @@ resource "azurerm_virtual_machine_scale_set" "vm-linux" {
     computer_name_prefix = "${var.computer_name_prefix}"
     admin_username       = "${var.admin_username}"
     admin_password       = "${var.admin_password}"
-    custom_data          = "${data.template_cloudinit_config.config.rendered}"
+    custom_data          = "${var.cloudconfig_rendered}"
   }
 
   os_profile_linux_config {

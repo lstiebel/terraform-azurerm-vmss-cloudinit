@@ -105,6 +105,6 @@ variable "tags" {
   }
 }
 
-variable "cloudconfig_file" {
-  description = "The location of the cloud init configuration file."
+variable "cloudconfig_rendered" {
+  description = "Rendered cloud-config file"
 }
